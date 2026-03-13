@@ -88,7 +88,7 @@ let maxY = homeY + cageSize;
 posX = Math.max(minX, Math.min(posX, maxX));
 posY = Math.max(minY, Math.min(posY, maxY));
 
-noButton.style.position = "fixed";
+noButton.style.position = "absolute";
 noButton.style.left = posX + "px";
 noButton.style.top = posY + "px";
 
