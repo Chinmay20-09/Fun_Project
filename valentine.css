@@ -48,6 +48,7 @@ body{
     transition:0.2s;
     position:absolute;
     margin-left: 250px;
+    transition: left 0.25s ease, top 0.25s ease;
 }
 .positive, .negative{
     width: 160px;
