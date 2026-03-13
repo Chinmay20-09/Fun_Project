@@ -26,9 +26,14 @@ function showEmoji(){
     },1000);
 }
 
+let moving = false;
+
 function moveNoButton(){
 
-    function moveNoButton(){
+if(moving) return;
+moving = true;
+
+noButton.style.pointerEvents = "none";
 
 let maxX = window.innerWidth - noButton.offsetWidth;
 let maxY = window.innerHeight - noButton.offsetHeight;
@@ -44,21 +49,11 @@ yesSize += 0.2;
 yesButton.style.transform = `scale(${yesSize})`;
 
 showEmoji();
-}
 
-/* Desktop: detect mouse getting close */
-document.addEventListener("mousemove", function(e){
-
-let rect = noButton.getBoundingClientRect();
-
-let dx = Math.abs(e.clientX - rect.left);
-let dy = Math.abs(e.clientY - rect.top);
-
-if(dx < 120 && dy < 120){
-moveNoButton();
-}
-
-});
+setTimeout(() => {
+moving = false;
+noButton.style.pointerEvents = "auto";
+}, 250);  // match transition time
 }
 
 // Desktop escape
