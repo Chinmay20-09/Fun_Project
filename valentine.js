@@ -77,7 +77,7 @@ posY += (homeY - posY)*0.1;
 posX = Math.max(homeX-cage, Math.min(posX,homeX+cage));
 posY = Math.max(homeY-cage, Math.min(posY,homeY+cage));
 
-noButton.style.position="absolute";
+noButton.style.position="fixed";
 noButton.style.left = posX+"px";
 noButton.style.top = posY+"px";
 
@@ -107,5 +107,5 @@ newCard.innerHTML=`
 `;
 
 document.body.appendChild(newCard);
-
+console.log(posX, posY);
 });
