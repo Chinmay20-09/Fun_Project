@@ -6,6 +6,7 @@ body{
     align-items:center;
     background:#ffe6eb;
     font-family:Arial, sans-serif;
+    overflow:hidden;
 }
 
 .card{
