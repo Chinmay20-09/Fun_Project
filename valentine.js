@@ -30,6 +30,8 @@ noButton.addEventListener("click", function(){
 
   let x = Math.random() * (window.innerWidth - noButton.offsetWidth);
   let y = Math.random() * (window.innerHeight - noButton.offsetHeight);
+  let x = Math.random() * maxX;
+  let y = Math.random() * maxY;
 
     noButton.style.position = "absolute";
     noButton.style.left = x + "px";
