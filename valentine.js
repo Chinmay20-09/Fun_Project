@@ -2,6 +2,7 @@ let noButton = document.querySelector(".negative");
 let yesButton = document.querySelector(".positive");
 let card = document.querySelector(".card");
 
+let emojiCooldown = false;
 let yesSize = 1;
 
 let emojis = ["😢","😭","🥺","💔","😔","😿"];
@@ -15,7 +16,13 @@ let posY = 0;
 let cage = 120;
 let safe = 140;
 
+/* emoji function */
+
 function showEmoji(){
+
+if(emojiCooldown) return;
+
+emojiCooldown = true;
 
 let emoji = document.createElement("div");
 
@@ -32,7 +39,13 @@ document.body.appendChild(emoji);
 
 setTimeout(() => emoji.remove(),1000);
 
+setTimeout(()=>{
+emojiCooldown = false;
+},2000);
+
 }
+
+/* store original button position */
 
 window.addEventListener("load", ()=>{
 
@@ -45,6 +58,8 @@ posX = homeX;
 posY = homeY;
 
 });
+
+/* movement logic */
 
 function update(cursorX,cursorY){
 
@@ -74,6 +89,8 @@ posY += (homeY - posY)*0.1;
 
 }
 
+/* cage limits */
+
 posX = Math.max(homeX-cage, Math.min(posX,homeX+cage));
 posY = Math.max(homeY-cage, Math.min(posY,homeY+cage));
 
@@ -83,14 +100,20 @@ noButton.style.top = posY+"px";
 
 }
 
+/* desktop */
+
 document.addEventListener("mousemove",e=>{
 update(e.clientX,e.clientY);
 });
+
+/* mobile */
 
 document.addEventListener("touchmove",e=>{
 let t = e.touches[0];
 update(t.clientX,t.clientY);
 });
+
+/* yes button */
 
 yesButton.addEventListener("click",()=>{
 
@@ -107,5 +130,5 @@ newCard.innerHTML=`
 `;
 
 document.body.appendChild(newCard);
-console.log(posX, posY);
+
 });
