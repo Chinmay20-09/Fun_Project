@@ -9,6 +9,8 @@ font-family:Arial, sans-serif;
 overflow:hidden;
 }
 
+/* card */
+
 .card{
 width:400px;
 padding:40px;
@@ -17,8 +19,9 @@ border-radius:20px;
 text-align:center;
 box-shadow:0 8px 20px rgba(0,0,0,0.2);
 position:relative;
-outline:2px solid red;
 }
+
+/* buttons container */
 
 .options{
 margin-top:25px;
@@ -26,32 +29,44 @@ display:flex;
 justify-content:space-between;
 position:relative;
 }
+
+/* buttons */
+
+.positive,
 .negative{
 width:160px;
 padding:15px;
 border-radius:15px;
 border:2px solid black;
 cursor:pointer;
+font-size:16px;
 }
+
+/* yes button */
 
 .positive{
 background:#ff4d6d;
 color:white;
-transition:0.3s;
+transition:transform 0.3s, background 0.3s;
 }
 
 .positive:hover{
 background:#e63956;
 }
 
+/* no button */
+
 .negative{
 background:#cccccc;
-transition:left 0.2s linear, top 0.2s linear;
+position:fixed;
+transition:left 0.1s linear, top 0.1s linear;
 }
 
 .negative:hover{
 background:#999999;
 }
+
+/* mobile layout */
 
 @media (max-width:600px){
 
