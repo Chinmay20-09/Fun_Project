@@ -3,6 +3,7 @@ let yesButton = document.querySelector(".positive");
 let card = document.querySelector(".card");
 
 let yesSize = 1;
+let moving = false;
 
 let emojis = ["😢","😭","🥺","💔","😔","😿"];
 
@@ -26,54 +27,67 @@ function showEmoji(){
     },1000);
 }
 
-let moving = false;
+function repelButton(cursorX, cursorY){
 
-function moveNoButton(){
+    if(moving) return;
 
-if(moving) return;
-moving = true;
+    let rect = noButton.getBoundingClientRect();
 
-noButton.style.pointerEvents = "none";
+    let buttonX = rect.left + rect.width / 2;
+    let buttonY = rect.top + rect.height / 2;
 
-let maxX = window.innerWidth - noButton.offsetWidth;
-let maxY = window.innerHeight - noButton.offsetHeight;
+    let dx = buttonX - cursorX;
+    let dy = buttonY - cursorY;
 
-let x = Math.random() * maxX;
-let y = Math.random() * maxY;
+    let distance = Math.sqrt(dx*dx + dy*dy);
 
-noButton.style.position = "fixed";
-noButton.style.left = x + "px";
-noButton.style.top = y + "px";
+    let safeDistance = 150;
 
-yesSize += 0.2;
-yesButton.style.transform = `scale(${yesSize})`;
+    if(distance < safeDistance){
 
-showEmoji();
+        moving = true;
 
-setTimeout(() => {
-moving = false;
-noButton.style.pointerEvents = "auto";
-}, 250);  // match transition time
+        let force = (safeDistance - distance) / safeDistance;
+
+        let moveX = dx * force * 2;
+        let moveY = dy * force * 2;
+
+        let newX = rect.left + moveX;
+        let newY = rect.top + moveY;
+
+        let maxX = window.innerWidth - rect.width;
+        let maxY = window.innerHeight - rect.height;
+
+        newX = Math.max(0, Math.min(newX, maxX));
+        newY = Math.max(0, Math.min(newY, maxY));
+
+        noButton.style.position = "fixed";
+        noButton.style.left = newX + "px";
+        noButton.style.top = newY + "px";
+
+        yesSize += 0.15;
+        yesButton.style.transform = `scale(${yesSize})`;
+
+        showEmoji();
+
+        setTimeout(() => {
+            moving = false;
+        },150);
+    }
 }
 
-// Desktop escape
-noButton.addEventListener("mouseover", moveNoButton);
-//Mobile escape
-document.addEventListener("touchmove", function(e){
-
-let touch = e.touches[0];
-let rect = noButton.getBoundingClientRect();
-
-let dx = Math.abs(touch.clientX - rect.left);
-let dy = Math.abs(touch.clientY - rect.top);
-
-if(dx < 120 && dy < 120){
-moveNoButton();
-}
-
+/* Desktop */
+document.addEventListener("mousemove", function(e){
+    repelButton(e.clientX, e.clientY);
 });
 
-// Yes button logic
+/* Mobile */
+document.addEventListener("touchmove", function(e){
+    let touch = e.touches[0];
+    repelButton(touch.clientX, touch.clientY);
+});
+
+/* Yes button */
 yesButton.addEventListener("click", function(){
 
     yesButton.style.transform = "scale(1)";
@@ -89,5 +103,4 @@ yesButton.addEventListener("click", function(){
     `;
 
     document.body.appendChild(newCard);
-
 });
