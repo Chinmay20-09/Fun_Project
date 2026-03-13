@@ -48,7 +48,7 @@ body{
     transition:0.2s;
     position:absolute;
     margin-left: 250px;
-    transition: left 0.25s ease, top 0.25s ease;
+    transition: left 0.12s linear, top 0.12s linear;
 }
 .positive, .negative{
     width: 160px;
