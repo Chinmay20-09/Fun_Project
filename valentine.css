@@ -26,8 +26,6 @@ display:flex;
 justify-content:space-between;
 position:relative;
 }
-
-.positive,
 .negative{
 width:160px;
 padding:15px;
@@ -48,7 +46,6 @@ background:#e63956;
 
 .negative{
 background:#cccccc;
-position:absolute;
 transition:left 0.2s linear, top 0.2s linear;
 }
 
