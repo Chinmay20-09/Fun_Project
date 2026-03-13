@@ -2,10 +2,9 @@ let noButton = document.querySelector(".negative");
 let yesButton = document.querySelector(".positive");
 let card = document.querySelector(".card");
 
-let speed = 1;
 let yesSize = 1;
 
-let emojis = ["😢","😭","🥺","💔","😔","😿","😤"];
+let emojis = ["😢","😭","🥺","💔","😔","😿"];
 
 function showEmoji(){
 
@@ -18,6 +17,7 @@ function showEmoji(){
     emoji.style.top = "50%";
     emoji.style.transform = "translate(-50%, -50%)";
     emoji.style.fontSize = "50px";
+    emoji.style.pointerEvents = "none";
 
     document.body.appendChild(emoji);
 
@@ -26,12 +26,13 @@ function showEmoji(){
     },1000);
 }
 
-noButton.addEventListener("click", function(){
+function moveNoButton(){
 
-  let x = Math.random() * (window.innerWidth - noButton.offsetWidth);
-  let y = Math.random() * (window.innerHeight - noButton.offsetHeight);
-  let x = Math.random() * maxX;
-  let y = Math.random() * maxY;
+    let maxX = window.innerWidth - noButton.offsetWidth;
+    let maxY = window.innerHeight - noButton.offsetHeight;
+
+    let x = Math.random() * maxX;
+    let y = Math.random() * maxY;
 
     noButton.style.position = "absolute";
     noButton.style.left = x + "px";
@@ -41,8 +42,28 @@ noButton.addEventListener("click", function(){
     yesButton.style.transform = `scale(${yesSize})`;
 
     showEmoji();
+}
+
+// Desktop escape
+noButton.addEventListener("mouseover", moveNoButton);
+
+// Mobile escape
+document.addEventListener("touchmove", function(e){
+
+    let touch = e.touches[0];
+
+    let rect = noButton.getBoundingClientRect();
+
+    let dx = Math.abs(touch.clientX - rect.left);
+    let dy = Math.abs(touch.clientY - rect.top);
+
+    if(dx < 100 && dy < 100){
+        moveNoButton();
+    }
+
 });
 
+// Yes button logic
 yesButton.addEventListener("click", function(){
 
     yesButton.style.transform = "scale(1)";
@@ -54,8 +75,9 @@ yesButton.addEventListener("click", function(){
 
     newCard.innerHTML = `
         <h2>Thank you ❤️</h2>
-        <p>Call me 📞 😉</p>
+        <p>You made my day!</p>
     `;
 
     document.body.appendChild(newCard);
+
 });
