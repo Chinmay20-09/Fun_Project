@@ -28,38 +28,53 @@ function showEmoji(){
 
 function moveNoButton(){
 
-    let maxX = window.innerWidth - noButton.offsetWidth;
-    let maxY = window.innerHeight - noButton.offsetHeight;
+    function moveNoButton(){
 
-    let x = Math.random() * maxX;
-    let y = Math.random() * maxY;
+let maxX = window.innerWidth - noButton.offsetWidth;
+let maxY = window.innerHeight - noButton.offsetHeight;
 
-    noButton.style.position = "absolute";
-    noButton.style.left = x + "px";
-    noButton.style.top = y + "px";
+let x = Math.random() * maxX;
+let y = Math.random() * maxY;
 
-    yesSize += 0.2;
-    yesButton.style.transform = `scale(${yesSize})`;
+noButton.style.position = "fixed";
+noButton.style.left = x + "px";
+noButton.style.top = y + "px";
 
-    showEmoji();
+yesSize += 0.2;
+yesButton.style.transform = `scale(${yesSize})`;
+
+showEmoji();
+}
+
+/* Desktop: detect mouse getting close */
+document.addEventListener("mousemove", function(e){
+
+let rect = noButton.getBoundingClientRect();
+
+let dx = Math.abs(e.clientX - rect.left);
+let dy = Math.abs(e.clientY - rect.top);
+
+if(dx < 120 && dy < 120){
+moveNoButton();
+}
+
+});
 }
 
 // Desktop escape
 noButton.addEventListener("mouseover", moveNoButton);
-
-// Mobile escape
+//Mobile escape
 document.addEventListener("touchmove", function(e){
 
-    let touch = e.touches[0];
+let touch = e.touches[0];
+let rect = noButton.getBoundingClientRect();
 
-    let rect = noButton.getBoundingClientRect();
+let dx = Math.abs(touch.clientX - rect.left);
+let dy = Math.abs(touch.clientY - rect.top);
 
-    let dx = Math.abs(touch.clientX - rect.left);
-    let dy = Math.abs(touch.clientY - rect.top);
-
-    if(dx < 100 && dy < 100){
-        moveNoButton();
-    }
+if(dx < 120 && dy < 120){
+moveNoButton();
+}
 
 });
 
