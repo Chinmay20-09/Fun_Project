@@ -12,7 +12,8 @@ let homeY = 0;
 let posX = 0;
 let posY = 0;
 
-let cageSize = 120;
+let cage = 120;
+let safe = 140;
 
 function showEmoji(){
 
@@ -29,13 +30,11 @@ emoji.style.pointerEvents = "none";
 
 document.body.appendChild(emoji);
 
-setTimeout(() => {
-emoji.remove();
-},1000);
+setTimeout(() => emoji.remove(),1000);
 
 }
 
-window.addEventListener("load", () => {
+window.addEventListener("load", ()=>{
 
 let rect = noButton.getBoundingClientRect();
 
@@ -47,26 +46,21 @@ posY = homeY;
 
 });
 
-function repelButton(cursorX, cursorY){
+function update(cursorX,cursorY){
 
 let rect = noButton.getBoundingClientRect();
 
-let centerX = posX + rect.width/2;
-let centerY = posY + rect.height/2;
+let dx = posX + rect.width/2 - cursorX;
+let dy = posY + rect.height/2 - cursorY;
 
-let dx = centerX - cursorX;
-let dy = centerY - cursorY;
+let dist = Math.hypot(dx,dy);
 
-let distance = Math.sqrt(dx*dx + dy*dy);
+if(dist < safe){
 
-let safe = 140;
+let force = (safe - dist)/safe;
 
-if(distance < safe){
-
-let force = (safe - distance) / safe;
-
-posX += dx * force * 0.4;
-posY += dy * force * 0.4;
+posX += dx * force * 0.3;
+posY += dy * force * 0.3;
 
 yesSize += 0.05;
 yesButton.style.transform = `scale(${yesSize})`;
@@ -75,47 +69,39 @@ showEmoji();
 
 }else{
 
-posX += (homeX - posX) * 0.1;
-posY += (homeY - posY) * 0.1;
+posX += (homeX - posX)*0.1;
+posY += (homeY - posY)*0.1;
 
 }
 
-let minX = homeX - cageSize;
-let maxX = homeX + cageSize;
-let minY = homeY - cageSize;
-let maxY = homeY + cageSize;
+posX = Math.max(homeX-cage, Math.min(posX,homeX+cage));
+posY = Math.max(homeY-cage, Math.min(posY,homeY+cage));
 
-posX = Math.max(minX, Math.min(posX, maxX));
-posY = Math.max(minY, Math.min(posY, maxY));
-
-noButton.style.position = "absolute";
-noButton.style.left = posX + "px";
-noButton.style.top = posY + "px";
+noButton.style.position="absolute";
+noButton.style.left = posX+"px";
+noButton.style.top = posY+"px";
 
 }
 
-/* Desktop */
-document.addEventListener("mousemove", e => {
-repelButton(e.clientX, e.clientY);
+document.addEventListener("mousemove",e=>{
+update(e.clientX,e.clientY);
 });
 
-/* Mobile */
-document.addEventListener("touchmove", e => {
-let touch = e.touches[0];
-repelButton(touch.clientX, touch.clientY);
+document.addEventListener("touchmove",e=>{
+let t = e.touches[0];
+update(t.clientX,t.clientY);
 });
 
-/* Yes button */
-yesButton.addEventListener("click", function(){
+yesButton.addEventListener("click",()=>{
 
-yesButton.style.transform = "scale(1)";
+yesButton.style.transform="scale(1)";
 
-card.style.display = "none";
+card.style.display="none";
 
-let newCard = document.createElement("div");
-newCard.className = "card";
+let newCard=document.createElement("div");
+newCard.className="card";
 
-newCard.innerHTML = `
+newCard.innerHTML=`
 <h2>Thank you ❤️</h2>
 <p>You made my day!</p>
 `;
