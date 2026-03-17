@@ -1,59 +1,85 @@
 body{
-    height:100vh;
-    margin:0;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    background:#ffe6eb;
-    font-family:Arial, sans-serif;
+height:100vh;
+margin:0;
+display:flex;
+justify-content:center;
+align-items:center;
+background:#ffe6eb;
+font-family:Arial, sans-serif;
+overflow:hidden;
 }
+
+/* card */
 
 .card{
-    width:400px;
-    padding:40px;
-    background:white;
-    border-radius:20px;
-    text-align:center;
-    box-shadow:0 8px 20px rgba(0,0,0,0.2);
+width:400px;
+padding:40px;
+background:white;
+border-radius:20px;
+text-align:center;
+box-shadow:0 8px 20px rgba(0,0,0,0.2);
+position:relative;
 }
+
+/* buttons container */
 
 .options{
-    margin-top:25px;
-    display:flex;
-    justify-content:space-between;
+margin-top:25px;
+position:relative;
+display:flex;
+justify-content:center;
+align-items:center;
 }
 
+/* buttons */
+
+.positive,
+.negative{
+width:160px;
+padding:15px;
+border-radius:15px;
+border:2px solid black;
+cursor:pointer;
+font-size:16px;
+}
+
+/* yes button */
+
 .positive{
-    width:40%;
-    padding:15px;
-    background:#ff4d6d;
-    color:white;
-    border-radius:10px;
-    cursor:pointer;
-    transition:0.3s;
-    position: relative;
+background:#ff4d6d;
+color:white;
+transition:transform 0.3s, background 0.3s;
 }
 
 .positive:hover{
-    background:#e63956;
+background:#e63956;
 }
 
+/* no button */
+
 .negative{
-    width:200px;
-    padding:15px;
-    background:#cccccc;
-    border-radius:10px;
-    cursor:pointer;
-    transition:0.2s;
-    position:absolute;
-    margin-left: 250px;
+background:#cccccc;
+position:fixed;
+transition:left 0.1s linear, top 0.1s linear;
 }
-.positive, .negative{
-    width: 160px;
-    padding: 15px;
-    border-radius: 15px;
-    border: 2px solid black;
-}
+
 .negative:hover{
-    background:#999999;
+background:#999999;
+}
+
+/* mobile layout */
+
+@media (max-width:600px){
+
+.options{
+flex-direction:column;
+align-items:center;
+gap:15px;
+}
+
+.positive,
+.negative{
+width:80%;
+}
+
 }

@@ -2,58 +2,133 @@ let noButton = document.querySelector(".negative");
 let yesButton = document.querySelector(".positive");
 let card = document.querySelector(".card");
 
-let speed = 1;
+let emojiCooldown = false;
 let yesSize = 1;
 
-let emojis = ["😢","😭","🥺","💔","😔","😿","😤"];
+let emojis = ["😢","😭","🥺","💔","😔","😿"];
+
+let homeX = 0;
+let homeY = 0;
+
+let posX = 0;
+let posY = 0;
+
+let cage = 120;
+let safe = 140;
+
+/* emoji function */
 
 function showEmoji(){
 
-    let emoji = document.createElement("div");
+if(emojiCooldown) return;
 
-    emoji.innerText = emojis[Math.floor(Math.random()*emojis.length)];
+emojiCooldown = true;
 
-    emoji.style.position = "fixed";
-    emoji.style.left = "50%";
-    emoji.style.top = "50%";
-    emoji.style.transform = "translate(-50%, -50%)";
-    emoji.style.fontSize = "50px";
+let emoji = document.createElement("div");
 
-    document.body.appendChild(emoji);
+emoji.innerText = emojis[Math.floor(Math.random()*emojis.length)];
 
-    setTimeout(() => {
-        emoji.remove();
-    },1000);
+emoji.style.position = "fixed";
+emoji.style.left = "50%";
+emoji.style.top = "50%";
+emoji.style.transform = "translate(-50%, -50%)";
+emoji.style.fontSize = "50px";
+emoji.style.pointerEvents = "none";
+
+document.body.appendChild(emoji);
+
+setTimeout(() => emoji.remove(),1000);
+
+setTimeout(()=>{
+emojiCooldown = false;
+},2000);
+
 }
 
-noButton.addEventListener("click", function(){
+/* store original button position */
 
-  let x = Math.random() * (window.innerWidth - noButton.offsetWidth);
-  let y = Math.random() * (window.innerHeight - noButton.offsetHeight);
+window.addEventListener("load", ()=>{
 
-    noButton.style.position = "absolute";
-    noButton.style.left = x + "px";
-    noButton.style.top = y + "px";
+let rect = noButton.getBoundingClientRect();
 
-    yesSize += 0.2;
-    yesButton.style.transform = `scale(${yesSize})`;
+homeX = rect.left;
+homeY = rect.top;
 
-    showEmoji();
+posX = homeX;
+posY = homeY;
+
 });
 
-yesButton.addEventListener("click", function(){
+/* movement logic */
 
-    yesButton.style.transform = "scale(1)";
+function update(cursorX,cursorY){
 
-    card.style.display = "none";
+let rect = noButton.getBoundingClientRect();
 
-    let newCard = document.createElement("div");
-    newCard.className = "card";
+let dx = posX + rect.width/2 - cursorX;
+let dy = posY + rect.height/2 - cursorY;
 
-    newCard.innerHTML = `
-        <h2>Thank you ❤️</h2>
-        <p>Call me 📞 😉</p>
-    `;
+let dist = Math.hypot(dx,dy);
 
-    document.body.appendChild(newCard);
+if(dist < safe){
+
+let force = (safe - dist)/safe;
+
+posX += dx * force * 0.3;
+posY += dy * force * 0.3;
+
+yesSize += 0.05;
+yesButton.style.transform = `scale(${yesSize})`;
+
+showEmoji();
+
+}else{
+
+posX += (homeX - posX)*0.1;
+posY += (homeY - posY)*0.1;
+
+}
+
+/* cage limits */
+
+posX = Math.max(homeX-cage, Math.min(posX,homeX+cage));
+posY = Math.max(homeY-cage, Math.min(posY,homeY+cage));
+
+noButton.style.position="fixed";
+noButton.style.left = posX+"px";
+noButton.style.top = posY+"px";
+
+}
+
+/* desktop */
+
+document.addEventListener("mousemove",e=>{
+update(e.clientX,e.clientY);
+});
+
+/* mobile */
+
+document.addEventListener("touchmove",e=>{
+let t = e.touches[0];
+update(t.clientX,t.clientY);
+});
+
+/* yes button */
+
+yesButton.addEventListener("click",()=>{
+
+yesButton.style.transform="scale(1)";
+
+card.style.display="none";
+
+let newCard=document.createElement("div");
+newCard.className="card";
+
+newCard.innerHTML=`
+<h2>Thank you ❤️</h2>
+<p>You made my day!</p>
+`;
+
+document.body.appendChild(newCard);
+
 });
